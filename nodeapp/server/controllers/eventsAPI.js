@@ -16,7 +16,7 @@ exports.getEventById = (req, res, next) => {
     .then(eventType => {
         if (!eventType) {
             res.status(404).json({
-                message: `Event type with id: ${evenId} not found!`
+                message: `Event with id: ${evenId} not found!`
             })
         } else {
             res.status(200).json(eventType);

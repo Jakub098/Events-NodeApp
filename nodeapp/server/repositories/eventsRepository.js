@@ -2,7 +2,7 @@ const db = require('../db');
 
 exports.getEvents = () => {
     return new Promise((resolve, reject) => {
-        db.query(`SELECT * FROM wydarzenie_typ`, (err, results) => {
+        db.query(`SELECT * FROM wydarzenie`, (err, results) => {
             if (err) {
                 return reject(err);
             }
@@ -12,10 +12,16 @@ exports.getEvents = () => {
 }
 
 exports.getEventById = (evenId) => {
-    const query = `SELECT p.id_typ as id_typ, 
-    p.nazwa_typu as nazwa_typu
-    FROM wydarzenie_typ p
-    where p.id_typ = ?`;
+    const query = `SELECT w.id_wydarzenie as id_wydarzenie, 
+    w.nazwa_wydarzenie as nazwa_wydarzenie,
+    w.data_wydarzenia as data_wydarzenia,
+    w.czy_wyprzedane as czy_wyprzedane,
+    t.id_typ as id_typ,
+    m.id_miejsce as id_miejsce,
+    FROM wydarzenie w
+    LEFT JOIN wydarzenie_typ t ON w.id_typ = t.id_typ
+    LEFT JOIN miejsce_wydarzenia m ON w.id_miejsce = m.id_miejsce
+    where w.id_wydarzenie = ?`;
 
     return new Promise((resolve, reject) => {
         db.query(query, [evenId], (err, results) => {
@@ -26,25 +32,25 @@ exports.getEventById = (evenId) => {
 }
 
 exports.createEvent = (eventData) => {
-    const sql = 'INSERT INTO wydarzenie_typ (nazwa_typu) VALUES (?)';
+    const sql = 'INSERT INTO wydarzenie (nazwa_wydarzenie, data_wydarzenia, czy_wyprzedane, id_typ, id_miejsce) VALUES (?, ?, ?, ?, ?)';
     return new Promise((resolve, reject) => {
-        db.execute(sql, [eventData.nazwa_typu], (err, results) => {
+        db.execute(sql, [eventData.nazwa_wydarzenie, eventData.data_wydarzenia, eventData.czy_wyprzedane, eventData.id_typ, eventData.id_miejsce], (err, results) => {
             return resolve('Ok');
         })
     })
 }
 
 exports.updateEvent = (evenId, eventData) => {
-    const sql = 'UPDATE wydarzenie_typ SET nazwa_typu = ? WHERE id_typ = ?';
+    const sql = 'UPDATE wydarzenie SET nazwa_wydarzenie = ? WHERE id_wydarzenie = ?';
     return new Promise((resolve, reject) => {
-        db.execute(sql, [eventData.nazwa_typu, evenId], (err, results) => {
+        db.execute(sql, [eventData.nazwa_wydarzenie, evenId], (err, results) => {
             return resolve('Ok');
         })
     })
 }
 
 exports.deleteEvent = (evenId) => {
-    const sql = 'DELETE FROM wydarzenie_typ WHERE id_typ = ?';
+    const sql = 'DELETE FROM wydarzenie WHERE id_wydarzenie = ?';
     return new Promise((resolve, reject) => {
         db.execute(sql, [evenId], (err, results) => {
             return resolve('Ok');
