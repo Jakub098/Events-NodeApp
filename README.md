@@ -1,4 +1,11 @@
 # ExampleNodeApp
+## description
+Przykładowy CRUD dla aplikacji przechowującej informację na temat wydarzeń kulturowych. Założeniem aplikacji było:
+* rozróżnienie typu wydarzenia (koncert, wydarzenie teatralne...)
+* przechowywanie informacji o miejscach wydarzeń, aby można było zarządzać sprzedażą blietów wstępu
+* przychowywanie informacji o artystach z którymi była nawiązana współpraca
+* przechowywanie informacji o wydarzeniach które się odbyły lub odbędą
+
 ## technology stack
 ticket-app use:
 * node.js
